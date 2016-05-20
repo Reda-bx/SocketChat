@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+  padding: 0; }
+  body .container {
+    width: 100%; }
+    body .container #content {
+      display: flex; }
+      body .container #content .col-50 {
+        width: 50%; }
+
+html, body {
+  height: 100%;
+  width: 100%; }

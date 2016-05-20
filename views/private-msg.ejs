@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <!-- <link rel="stylesheet" href="/stylesheets/css/style.css"> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <script src="/javascripts/jquery.js"></script>
+  <style>
+    body{
+      margin-top: 30px
+    }
+    .error{
+      color: red
+    }
+
+    .direction_right{
+      text-align: right;
+    }
+    .direction_left{
+      text-align: left;
+    }
+  </style>
+</head>
+<body class="auth">
+  <!-- <input id="search" name="query" type="text" />
+  <ul id="results"></ul>
+  <a href="/logout">logout</a> -->
+  <div class="container">
+    <h1 id="username"><%=username%></h1>
+    <div id="messageArea" class="row">
+      <div class="col-md-4">
+        <div class="well">
+          <h3>Online users</h3>
+
+          <ul class="list-group" id="users"></ul>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="chat" id="chat">
+
+        </div>
+        <form id="messageForm">
+          <div class="form-group">
+            <label>Enter Message</label>
+            <textarea class="form-control" id="message"></textarea>
+            <br>
+            <input type="submit" class="btn btn-primary" value="Send">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="/javascripts/socket.io.js"></script>
+<script src="/javascripts/function.js"></script>
+<script>
+  $(function(){
+    var socket = io.connect();
+    var $messageForm = $("#messageForm");
+    var $message = $("#message");
+    var $chat = $('#chat');
+
+    var $users = $("#users")
+    var $username = $('#username');
+
+
+    socket.emit('load msg', window.location.href.match(/\/([^\/]+)\/?$/)[1], $username.text());
+    socket.on('get msgs', function(data){
+      for(var i=0; i < data.length; i++){
+        if(data[i].from == $username.text()){
+          $chat.append('<div class="direction_right well"><strong>'+data[i].from+'</strong><div class="msgCentent">'+data[i].msg+'</div></div>');
+        }else{
+          $chat.append('<div class="well"><strong>'+data[i].from+'</strong><div class="msgCentent">'+data[i].msg+'</div></div>');
+        }
+      }
+    })
+    $messageForm.submit(function(e){
+      e.preventDefault();
+      var link= window.location.href;
+      var to = link.match(/\/([^\/]+)\/?$/)[1];
+      console.log(to);
+      socket.emit('Send message', $message.val(), to ,function(data){
+        // add stuff l8r
+        $chat.append('<div class="error well">'+data+'</div>')
+      });
+      $message.val('');
+    });
+    socket.emit('new user', $username.text());
+    socket.on('new message', function(data) {
+       $chat.append('<div class="well"><strong>'+data.user+'</strong> :'+data.msg+'</div>')
+    });
+
+    socket.on('get users', function(data){
+      var html = '';
+      for(var i = 0; i < data.length; i++){
+        html += '<li class="list-group-item"><a href="/messages/'+data[i]+'">'+data[i]+'</a></li>';
+      }
+      $users.html(html);
+    });
+    socket.on('whisper', function(data){
+      if(data.user == $username.text()){
+        $chat.append('<div class="direction_right well"><strong>'+data.user+'</strong><div class="msgCentent">'+data.msg+'</div></div>');
+      }else{
+        $chat.append('<div class="direction_left well"><strong>'+data.user+'</strong><div class="msgCentent">'+data.msg+'</div></div>');
+      }
+    })
+  })
+</script>
+</html>

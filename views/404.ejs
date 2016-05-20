@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Page Not Found</title>
+
+    <style type="text/css">
+        * { margin: 0; padding: 0; }
+
+        body { background: #eee; }
+        #container {
+            width: 800px; height: 380px; margin: 50px auto; padding: 170px 0 0 0; text-align: center;
+            background: url(http://line25.com/wp-content/uploads/2009/anaglyphic-text/demo/main-bg.jpg) 0 0 no-repeat;
+        }
+
+        h1 {
+            display: inline;
+            position: relative;
+            font: 200px Helvetica, Sans-Serif;
+            letter-spacing: -5px;
+            color: rgba(0,0,255,0.5);
+        }
+
+        #two:after {
+            content: "404";
+            position: absolute; left: 10px; top: 5px;
+            color: rgba(255,0,0,0.5);
+        }
+        #one:after{
+            content: "Error";
+            position: absolute; left: 10px; top: 5px;
+            color: rgba(255,0,0,0.5);
+        }
+    </style>
+</head>
+
+<body>
+<div id="container">
+    <h1 id="one">Error </h1><h1 id="two">404</h1>
+</div>
+</body>
+</html>

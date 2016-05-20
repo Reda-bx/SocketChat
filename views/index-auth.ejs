@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <!-- <link rel="stylesheet" href="/stylesheets/css/style.css"> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <script src="/javascripts/jquery.js"></script>
+  <style>
+    body{
+      margin-top: 30px
+    }
+    .error{
+      color: red
+    }
+    .direction_right{
+      tex
+    }
+    .derection_left{
+      text-align: left
+    }
+  </style>
+</head>
+<body class="auth">
+  <!-- <input id="search" name="query" type="text" />
+  <ul id="results"></ul>
+  <a href="/logout">logout</a> -->
+  <div class="container">
+    <h1 id="username"><%=username%></h1>
+    <div id="messageArea" class="row">
+      <div class="col-md-4">
+        <div class="well">
+          <h3>Online users</h3>
+          <ul class="list-group" id="users"></ul>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="chat" id="chat"></div>
+
+      </div>
+    </div>
+  </div>
+</body>
+<script src="/javascripts/socket.io.js"></script>
+<script src="/javascripts/function.js"></script>
+<script>
+  $(function(){
+    var socket = io.connect();
+
+    var $users = $("#users")
+    var $username = $('#username');
+    socket.emit('new user', $username.text());
+
+    socket.on('get users', function(data){
+      var html = '';
+      for(var i = 0; i < data.length; i++){
+        html += '<li class="list-group-item"><a href="/messages/'+data[i]+'">'+data[i]+'</a></li>';
+      }
+      $users.html(html);
+    });
+  })
+</script>
+</html>
